@@ -28,6 +28,18 @@ services:
       - database
     networks:
       - backend
+  producer:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
+    networks:
+      - backend
+    tty: true
+    stdin_open: true
 
 networks:
   backend:
