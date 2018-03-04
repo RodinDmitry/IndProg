@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres
+  backend:
+    build:
+      context: ./../task2/
+      dockerfile: Dockerfile
+    command: bash init.sh
+    volumes:
+      - ./:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: bash init.sh
+    volumes:
+      - ./:/code/react
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - frontend

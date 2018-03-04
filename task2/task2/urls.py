@@ -13,14 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from django.conf.urls import url, include
+from rest_framework import routers
+from backend import views
 
-from django.contrib import admin
-from django.conf.urls import url
-from todolist.views import TaskListView, TaskAddView, complete_task
+router = routers.DefaultRouter()
+router.register(r'tasks', views.TaskViewSet)
 
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^list/$', TaskListView.as_view(), name="list"),
-    url(r'^add/$', TaskAddView.as_view(), name="add"),
-    url(r'^check/$', complete_task, name="check"),
+    url(r'^', include(router.urls)),
+    url(r'^task/(?P<pk>\d+)/$', views.TaskDetail.as_view(), name='task-detail'),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
